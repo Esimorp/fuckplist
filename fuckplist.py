@@ -1,7 +1,8 @@
 import sys
-from PIL import Image
+from PIL import Image, ImageDraw
 
 im = Image.open(sys.argv[1])
+draw = ImageDraw.Draw(im)
 pix = im.load()
 width = im.size[0]
 height = im.size[1]
@@ -81,9 +82,15 @@ while True:
 
     print('crop', start_x, start_y, end_x, end_y)
     box = (start_x, start_y, end_x, end_y)
+    draw.line(((start_x, start_y), (start_x, end_y)), fill=(200, 10, 10))
+    draw.line(((start_x, start_y), (end_x, start_y)), fill=(200, 10, 10))
+    draw.line(((end_x, end_y), (end_x, start_y)), fill=(200, 10, 10))
+    draw.line(((end_x, end_y), (start_x, end_y)), fill=(200, 10, 10))
     region = im.crop(box)
     region.save("fuck" + str(index) + ".png")
     for x in range(start_x, end_x + 2):
         offset_y[x] = end_y
     offset_x = end_x + 1
     index += 1
+
+im.save("fuck.png")
